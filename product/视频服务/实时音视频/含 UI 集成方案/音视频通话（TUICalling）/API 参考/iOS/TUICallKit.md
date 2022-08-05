@@ -20,9 +20,11 @@ TUICallKit API 是音视频通话组件的**含 UI 接口**，使用TUICallKit A
 
 ### createInstance
 创建 TUICallKit 的单例。
+
 ```objc
 - (instancetype)createInstance;
 ```
+
 ### call
 拨打电话（1v1通话）
 
@@ -63,7 +65,6 @@ TUICallKit API 是音视频通话组件的**含 UI 接口**，使用TUICallKit A
 | groupId | NSString | 此次群组通话的群 Id. |
 | callMediaType | TUICallMediaType | 通话的媒体类型，比如视频通话、语音通话 |
 
-
 ### setCallingBell
 设置自定义来电铃音，这里仅限传入本地文件地址，需要确保该文件目录是应用可以访问的。
 
@@ -77,7 +78,6 @@ TUICallKit API 是音视频通话组件的**含 UI 接口**，使用TUICallKit A
 ```objc
 - (void)enableMuteMode:(BOOL)enable;
 ```
-
 
 ### enableFloatWindow
 开启/关闭悬浮窗功能，设置为false后，通话界面左上角的悬浮窗按钮会隐藏。

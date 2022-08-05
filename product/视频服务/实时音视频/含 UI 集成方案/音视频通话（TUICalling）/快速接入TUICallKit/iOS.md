@@ -6,20 +6,22 @@ TUICalling iOS 平台音视频通话组件支持如下两种接入方式：
 
 本文以`TUICallKit`的接入为主，如果您需要使用`TUICallEngine`进行接入，可以参考 [TUICallEngine API]()。
 
-
-## 环境准备
-在iOS 平台，TUICallKit 的集成需要满足如下要求：
-
-- iOS 9.0 (API level 16) 及更高；
-
-
 ## 接入TUICallKit
+
 通过集成TUICallKit，您可以通过对方 UserId 直接拨打一个 1v1 通话，也可以在创建一个群组后，通过TUICallKit 来发起一次群组通话，开始接入！
 
+### 步骤一：导入 TUICallKit 组件
 
-### 步骤一：下载并导入 TUICallKit 组件
 **通过 cocoapods 导入组件**，具体步骤如下：
+1. 在您的工程 `Podfile` 文件同一级目录下创建 `TUICallKit` 文件夹。
+2. 单击进入 [**Github/TUICalling**](https://github.com/tencentyun/TUICalling) ，选择克隆/下载代码，然后将 [**TUICalling/iOS/**](https://github.com/tencentyun/TUICalling/tree/main/iOS) 目录下的 `TUICallKit`、`Resources` 文件夹 和 `TUICallKit.podspec` 文件拷贝到您在 `步骤1` 创建的 TUICallKit 文件夹下。
+3. 在您的 Podfile 文件中添加以下依赖，之后执行 `pod install` 命令，完成导入。
+```
+# :path => "指向TUICalling.podspec的相对路径"
+pod 'TUICallKit', :path => "TUICallKit/TUICallKit.podspec", :subspecs => ["TRTC"]
+```
 
+>!  `TUICallKit`、`Resources` 文件夹 和`TUICallKit.podspec`文件必需在同一目录下。
 
 ### 步骤二：配置权限
 
@@ -39,44 +41,37 @@ TUICalling iOS 平台音视频通话组件支持如下两种接入方式：
 <dx-codeblock>
 :::  Objective-C
 ```
-// 1.组件登录
-[TUILogin login:userID userID:groupID userSig:groupID succ:^{
+// 组件登录
+[TUILogin login:Int32(sdkAppId) userId:user userSig:userSig succ:^{
         NSLog(@"login success");
- } fail:^(int code, NSString *msg) {
+} fail:^(int code, NSString *msg) {
         NSLog(@"login failed, code: %d, error: %@", code, msg);
- }];
- 
- // 2.初始化TUICalling实例
-[TUICallKit createInstance];
+}];
 ```
 :::
 ::: Swift
 ```
-// 2.初始化TUICalling实例
-TUILogin.login(Int32(SDKAPPID), userID: user, userSig: userSig) {
-         print("login success")
- } fail: { (code, err) in
-         print("login failed, code: \(code), error: \(message ?? "nil")")
- }
- 
-// 2.初始化TUICallKit实例
-TUICallKit.createInstance()
+// 组件登录
+TUILogin.login(sdkAppId, userId: user, userSig: userSig) {
+        print("login success")
+} fail: { (code, err) in
+        print("login failed, code: \(code), error: \(message ?? "nil")")
+}
 ```
 :::
 </dx-codeblock>
 
 **参数说明**：
 - **SDKAppID**：**TRTC 应用ID**，如果您未开通腾讯云 TRTC 服务，可进入 [腾讯云实时音视频控制台](https://console.cloud.tencent.com/trtc/app)，创建一个新的 TRTC 应用后，单击**应用信息**，SDKAppID 信息如下图所示：
-![](https://qcloudimg.tencent-cloud.cn/raw/3d6ebfa2a1e4ae5d3af3ecd564fb1463.png)
+![](https://qcloudimg.tencent-cloud.cn/raw/e435332cda8d9ec7fea21bd95f7a0cba.png)
 - **Secretkey**：**TRTC 应用密钥**，和 SDåKAppId 对应，进入 [TRTC 应用管理](https://console.cloud.tencent.com/trtc/app) 后，SecretKey 信息如上图所示。
 - **userId**：当前用户的 ID，字符串类型，长度不超过32字节，不支持使用特殊字符，建议使用英文或数字，可结合业务实际账号体系自行设置。
-- **userSig**：根据 SDKAppId、userId，Secretkey 等信息计算得到的安全保护签名，您可以单击 [这里](https://console.cloud.tencent.com/trtc/usersigtool) 直接在线生成一个调试的 UserSig，也可以参照我们的 [TUICalling示例工程](https://github.com/tencentyun/TUICalling/blob/main/Android/app/src/main/java/com/tencent/liteav/demo/LoginActivity.java#L74)自行计算，更多信息请参见 [如何计算及使用 UserSig](https://cloud.tencent.com/document/product/647/17275)。
+- **userSig**：根据 SDKAppID、userId，Secretkey 等信息计算得到的安全保护签名，您可以单击 [这里](https://console.cloud.tencent.com/trtc/usersigtool) 直接在线生成一个调试的 UserSig，也可以参照我们的 [TUICalling示例工程](https://github.com/tencentyun/TUICalling/blob/main/Android/app/src/main/java/com/tencent/liteav/demo/LoginActivity.java#L74)自行计算，更多信息请参见 [如何计算及使用 UserSig](https://cloud.tencent.com/document/product/647/17275)。
 
 > ! 这个步骤也是目前腾讯云音视频团队收到的反馈最多的步骤，常见的有如下几类，欢迎自查：
-> 1. sdkappid 设置错误，国内站sdkappid一般是140开头的10位整数；
-> 2. userSig 配置成 Secretkey，userSig是根据sdkappid、userid、secretkey，以及过期时间等参数动态生成的，详见上面的解释；
-> 3. userid 都设置成“1”、“123”、“111”等简单字符串，在多人协作时，被后面设置的同学“覆盖”，导致初始失败，建议在调试的时候设置一些辨识度高的userId；
-
+> 1. SDKAppID 设置错误，国内站SDKAppID一般是140开头的10位整数；
+> 2. userSig 配置成 Secretkey，userSig是根据SDKAppID、userId、Secretkey，以及过期时间等参数动态生成的，详见上面的解释；
+> 3. userId 都设置成“1”、“123”、“111”等简单字符串，在多人协作时，被后面设置的同学“覆盖”，导致初始失败，建议在调试的时候设置一些辨识度高的userId；
 
 
 ###  步骤四：拨打通话
@@ -92,7 +87,7 @@ TUICallKit.createInstance()
 :::
 ::: Swift
 ```
-// 2.初始化TUICalling实例
+// 2.初始化TUICallKit实例
 TUICallKit.createInstance().call(userId: "100001", callType: .video)
 ```
 :::
@@ -132,21 +127,21 @@ TUICallKit.createInstance().groupCall("12345678", userIdList: ["100001", "100002
 - <dx-codeblock>
 :::  Objective-C
 ```
- [[TUICallKit createInstance]setSelfInfo:@"昵称" avatar:@"头像url" succ:^{
-            NSLog(@"login success");
-  } fail:^(int code, NSString *errMsg) {
-            NSLog(@"login failed, code: %d, error: %@", code, errMsg);
-  }];
+[[TUICallKit createInstance] setSelfInfo:@"昵称" avatar:@"头像url" succ:^{
+        NSLog(@"login success");
+} fail:^(int code, NSString *errMsg) {
+        NSLog(@"login failed, code: %d, error: %@", code, errMsg);
+}];
 ```
 ```
-:::
+::
 ::: Swift
 ```
  TUICallKit.createInstance().setSelfInfo(nickname: "昵称", avatar: "头像url") {
-            print("login success")
-  } fail: {(code, desc) in
-            print("login failed, code: \(code), error: \(desc ?? "nil")")
-  }
+        print("login success")
+} fail: {(code, desc) in
+        print("login failed, code: \(code), error: \(desc ?? "nil")")
+}
 ```
 :::
 </dx-codeblock>
@@ -179,22 +174,20 @@ TUICallKit.createInstance().groupCall("12345678", userIdList: ["100001", "100002
     
 }
 :::
-::: Swift Swift
+::: Swift
 TUICallEngine.createInstance().add(self)
 
 public func onCallBegin(roomId: TUIRoomId, callMediaType: TUICallMediaType, callRole: TUICallRole) {
         
- }
+}
 public func onCallEnd(roomId: TUIRoomId, callMediaType: TUICallMediaType, callRole: TUICallRole, totalTime: Float) {
         
- }
+}
 public func onUserNetworkQualityChanged(networkQualityList: [TUINetworkQualityInfo]) {
         
- }
+}
 :::
 </dx-codeblock>
 
 ### 五. 自定义铃音
 调用 [TUICalling#setCallingBell](https://cloud.tencent.com/document/product/647/47748#setCallingBell) 即可。
-
-

@@ -4,7 +4,7 @@ TUICallKit API 是音视频通话组件的**含 UI 接口**，使用TUICallKit A
 
 | API | 描述 |
 |-----|-----|
-| [createInstance](#sharedinstance) | 创建 TUICallKit 实例（单例模式）|
+| [createInstance](#createInstance) | 创建 TUICallKit 实例（单例模式）|
 | [setSelfInfo](#setSelfInfo) | 设置用户的头像、昵称|
 | [call](#call) | 发起 1v1 通话|
 | [groupCall](#groupCall) | 发起群组通话|
@@ -34,21 +34,20 @@ TUICallEngine API 是音视频通话组件的**无 UI 接口**，如果 TUICallK
 | [inviteUser](#inviteUser) | 在群组通话中，邀请其他人加入 |
 | [joinInGroupCall](#joinInGroupCall) | 主动加入当前的群组通话中 |
 | [switchCallMediaType](#switchCallMediaType) | 切换通话媒体类型，比如视频通话切音频通话|
-| [setRenderView](#setRenderView) | 设置显示视频画面的 View 对象 |
-| [startRemoteView](#startRemoteView) | 设置显示视频画面的 View 对象 |
-| [stopRemoteView](#stopRemoteView) | 设置显示视频画面的 View 对象 |
+| [startRemoteView](#startRemoteView) | 开始订阅远端用户视频流 |
+| [stopRemoteView](#stopRemoteView) | 停止订阅远端用户视频流 |
 | [openCamera](#opencamera) | 开启摄像头|
-| [closeCamara](#closecamara) | 关闭摄像头|
-| [switchCamera](#switchcamera) | 切换前后摄像头|
-| [openMicrophone](#setmicmute) | 打开麦克风|
-| [closeMicrophone](#sethandsfree) | 关闭麦克风|
-| [selectAudioPlaybackDevice](#setmicmute) | 选择音频播放设备（听筒/免提）|
+| [closeCamera](#closeCamera) | 关闭摄像头|
+| [switchCamera](#switchCamera) | 切换前后摄像头|
+| [openMicrophone](#openMicrophone) | 打开麦克风|
+| [closeMicrophone](#closeMicrophone) | 关闭麦克风|
+| [selectAudioPlaybackDevice](#selectAudioPlaybackDevice) | 选择音频播放设备（听筒/免提）|
 | [setSelfInfo](#setSelfInfo) | 设置用户的头像、昵称|
 | [enableMultiDeviceAbility](#enableMultiDeviceAbility) | 开启/关闭 TUICallEngine 的多设备登录模式 （尊享版套餐支持）|
 
 
-
 ## TUICallObserver 
+
 TUICallObserver 是 TUICallEngine 对应的回调事件类，您可以通过此回调，来监听自己感兴趣的回调事件。
 
 | API | 描述 |
@@ -71,13 +70,14 @@ TUICallObserver 是 TUICallEngine 对应的回调事件类，您可以通过此�
 
 
 ## 关键类型定义
+
 | API | 描述 |
 |-----|-----|
 | [TUICallMediaType]() | 通话的媒体类型，枚举类型：视频通话、语音通话 |
 | [TUICallRole]() | 通话的角色，枚举类型：主叫、被叫 |
 | [TUICallStatus]() | 通话的状态，枚举类型：空闲、待接听、接听中 |
 | [TUIRoomId]() | 音视频房间Id，支持数字、字符串两种类型 |
-| [TUICallCamera]() | 摄像头Id参数，枚举类型：前摄、后摄|
+| [TUICamera]() | 摄像头Id参数，枚举类型：前摄、后摄|
 | [TUIAudioPlaybackDevice]() | 声音的播放设备，枚举类型：扬声器、听筒 |
 | [TUINetworkQualityInfo]() | 当前的网络质量信息 |
 
