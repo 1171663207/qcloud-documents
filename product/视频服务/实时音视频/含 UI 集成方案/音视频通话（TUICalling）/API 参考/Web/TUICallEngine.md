@@ -51,7 +51,6 @@ tuiCallEngine.destroyInstance().then(() => {
   //success
 }).catch(error => {
   console.warn('destroyInstance error:', error);
-});
 ```
 
 ### on
@@ -125,7 +124,7 @@ promise.then(() => {
 ```
 
 ### groupCall
-IM 群组邀请通话，被邀请方会收到 `EVENT.INVITED` 事件。
+IM 群组邀请通话，被邀请方会收到 `TUICallEvent.INVITED` 事件。
 
 ```javascript
 let promise = tuiCallEngine.groupCall({
@@ -141,7 +140,6 @@ promise.then(() => {
 ```
 
 ### accept
-
 当您作为被邀请方收到 `TUICallEvent.INVITED` 事件的回调时，可以调用该接口接听来电。
 
 ```javascript
@@ -172,6 +170,9 @@ tuiCallEngine.on(TUICallEvent.INVITED, () => {
 - 当您处于通话中，可以调用该接口结束通话
 - 当未拨通时, 可用来取消通话
 
+- 当您处于通话中，可以调用该接口结束通话
+- 当未拨通时, 可用来取消通话
+
 ```javascript
 tuiCallEngine.hangup().then(() => {
    //success
@@ -184,6 +185,8 @@ tuiCallEngine.hangup().then(() => {
 当前通话类型切换。
 - 仅支持1v1通话过程中使用
 - 失败监听 ERROR 事件，code: 60001
+
+
 ```javascript
 // 1 表示语音通话；2 表示视频通话
 tuiCallEngine.switchCallMediaType(2).then(() => {
